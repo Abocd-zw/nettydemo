@@ -9,6 +9,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 
 /**
@@ -28,18 +29,19 @@ public class NettyTcpServer {
             serverBootstrap.group(boosGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
-                    .option(ChannelOption.SO_RCVBUF, 10240)
+                    //.option(ChannelOption.SO_RCVBUF, 10240)
                     //
-                    .option(ChannelOption.TCP_NODELAY, false)
+                    //.option(ChannelOption.TCP_NODELAY, false)
                     //.option(ChannelOption.SO_SNDBUF, 10240)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();
+                            // 解决粘包问题
+                            pipeline.addLast(new LineBasedFrameDecoder(2048));
+                            //pipeline.addLast(new StringDecoder());
                             pipeline.addLast(new NettyTcpServerHandler());
-                            pipeline.addLast(new CustomDecode());
-                            pipeline.addLast(new StringDecoder());
                         }
                     });
 

@@ -5,6 +5,9 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
+
+import java.util.Arrays;
+
 /**
  * @description:
  * @author: zhangw
@@ -15,12 +18,36 @@ public class NettyTcpClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("client    " + ctx);
         //将数据写到缓存区，再传到通道里
-        //ctx.writeAndFlush(Unpooled.copiedBuffer("hello server", CharsetUtil.UTF_8));
-        String content = "你好，服务器! ";
+
+        //String content = "你好，服务器! ";
         //byte[] bytes = content.getBytes(Charset.forName("UTF-8"));
-        for (int i=0; i< 10000; i++) {
-            ctx.writeAndFlush(Unpooled.copiedBuffer("你好，服务器，我是客户端! ", CharsetUtil.UTF_8));
+//        for (int i=0; i< 10; i++) {
+//            // 模拟粘包
+//           // ctx.writeAndFlush(Unpooled.copiedBuffer("你好，服务器，我是客户端" + i, CharsetUtil.UTF_8));
+//            // 模拟解决粘包方式一：添加换行符
+//            ctx.writeAndFlush(Unpooled.copiedBuffer("你好，服务器，我是netty客户端" + i + "\n", CharsetUtil.UTF_8));
+//        }
+
+        // 模拟拆包
+//        byte[] bytes = new byte[102400];
+//        Arrays.fill(bytes, (byte)10);
+//        for (int i = 0; i < 10; i++) {
+//            ctx.writeAndFlush(Unpooled.copiedBuffer(bytes));
+//        }
+
+        //一次发送102400字节数据
+        try{
+            char[] chars = new char[10240];
+            Arrays.fill(chars, 0, 10238, 'a');
+            chars[10239] = '\n';
+            for (int i = 0; i < 10; i++) {
+                ctx.writeAndFlush(Unpooled.copiedBuffer(chars, CharsetUtil.UTF_8));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            //e.printStackTrace();
         }
+
 
     }
 

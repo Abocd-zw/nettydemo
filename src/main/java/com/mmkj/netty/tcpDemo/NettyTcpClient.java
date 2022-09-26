@@ -7,6 +7,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 
 /**
  * @description:
@@ -33,6 +34,8 @@ public class NettyTcpClient {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
+                            // 解决粘包问题
+                            pipeline.addLast(new LineBasedFrameDecoder(2048));
                             pipeline.addLast(new NettyTcpClientHandler());
                         }
                     });

@@ -13,7 +13,7 @@ import io.netty.util.CharsetUtil;
  */
 public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
-
+    private int count = 0;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -25,9 +25,14 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg){
         //System.out.println("server ctx =" + ctx);
         //将客户端消息msg 转换为ByteBuf类型，此bytebuf是netty提供的，性能更高
+        System.out.println("读取次数 = " + (++count));
         if (msg instanceof ByteBuf ) {
             ByteBuf buf = (ByteBuf) msg;
-            //
+            // 模拟拆包
+            //System.out.println("读取次数 = " + (++count));
+            //System.out.println("长度是：" + buf.readableBytes());
+
+            // 模式粘包
             System.out.println("client send message: " + buf.toString(CharsetUtil.UTF_8));
             System.out.println("client send address: " + ctx.channel().remoteAddress());
         } else {
