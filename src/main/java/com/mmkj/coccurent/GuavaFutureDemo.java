@@ -5,6 +5,9 @@ import com.mmkj.common.utils.Logger;
 
 import java.util.concurrent.*;
 
+/**
+ * @author Abocd
+ */
 public class GuavaFutureDemo {
     private static class HotWaterJob implements Callable<Boolean> {
         @Override
@@ -41,6 +44,7 @@ public class GuavaFutureDemo {
     private static class ReadBookJob implements Runnable{
         boolean waterOk = false;
         boolean washOk = false;
+        @Override
         public void run() {
             while (true) {
                 try {

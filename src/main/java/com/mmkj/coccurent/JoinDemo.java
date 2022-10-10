@@ -8,10 +8,11 @@ import java.util.concurrent.TimeUnit;
  *  @author Abocd
  */
 public class JoinDemo {
-    static class HotWarterThread extends Thread{
-        public HotWarterThread() {
+    static class HotWaterThread extends Thread{
+        public HotWaterThread() {
             super("烧水-Thread");
         }
+        @Override
         public void run() {
             try {
                 Logger.info("开始烧水");
@@ -28,6 +29,7 @@ public class JoinDemo {
         public WashThread() {
             super("清洗-Thread");
         }
+        @Override
         public void run() {
             try {
                 Logger.info("开始洗茶壶");
@@ -41,14 +43,14 @@ public class JoinDemo {
     }
 
     public static void main(String[] args) {
-        HotWarterThread hotWarterThread = new HotWarterThread();
+        HotWaterThread hotWaterThread = new HotWaterThread();
         WashThread washThread = new WashThread();
 
-        hotWarterThread.start();
+        hotWaterThread.start();
         washThread.start();
 
         try {
-            hotWarterThread.join();
+            hotWaterThread.join();
             washThread.join();
             Logger.info("泡茶喝");
         } catch (InterruptedException e) {

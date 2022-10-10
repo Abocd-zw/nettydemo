@@ -7,8 +7,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Abocd
+ */
 public class FutureDemo {
-    private static class HotWarterJob implements Callable<Boolean> {
+    private static class HotWaterJob implements Callable<Boolean> {
 
         @Override
         public Boolean call() throws Exception {
@@ -52,8 +55,8 @@ public class FutureDemo {
         }
     }
     public static void main(String[] args) {
-        HotWarterJob hotWarterJob = new HotWarterJob();
-        FutureTask<Boolean> futureTask = new FutureTask<>(hotWarterJob);
+        HotWaterJob hotWaterJob = new HotWaterJob();
+        FutureTask<Boolean> futureTask = new FutureTask<>(hotWaterJob);
         Thread thread = new Thread(futureTask);
 
         WashCapJob washCapJob = new WashCapJob();
@@ -69,9 +72,7 @@ public class FutureDemo {
             Boolean aBoolean = futureTask.get();
             Boolean aBoolean1 = futureTask1.get();
             drinkTea(aBoolean,aBoolean1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 

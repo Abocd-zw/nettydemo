@@ -10,6 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+/**
+ * @author Abocd
+ */
 public class FileNIOFastCopyDemo {
 
     public static void main(String[] args) {
